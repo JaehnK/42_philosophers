@@ -1,22 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaehukim <jaehukim42@student.42gyeong      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/13 20:27:16 by jaehukim          #+#    #+#             */
-/*   Updated: 2024/07/13 20:31:42 by jaehukim         ###   ########.fr       */
+/*   Created: 2024/07/13 20:31:48 by jaehukim          #+#    #+#             */
+/*   Updated: 2024/07/13 20:31:50 by jaehukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
-# include <pthread.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include <stdio.h>
-# include <string.h>
-# include <sys/time.h>
+#include "../includes/philo.h"
 
-# endif
+int	main(int argc, char *argv[])
+{
+	t_args *args;
+	ft_parse_arguments(argc, argv, &args);
+	printf("%d %d %d %d %d", args->n_philos, args->time_die, args->time_eat, args->time_sleep, args->time_must_eat);
+	return (0);
+}
