@@ -20,3 +20,19 @@ void	ft_error(char *msg)
 		perror("Error");
 	exit(EXIT_FAILURE);
 }
+
+void	ft_clear_philo(t_philo **philo)
+{
+	int	idx;
+
+	idx = 0;
+	while (idx < (*philo)->args->n_philos)
+	{
+		if (pthread_join((*philo)->threads[idx], NULL))
+			ft_error("Error excute while joining pthread");
+		if (pthread_mutex_destroy(&((*philo)->mutexs[idx])))
+			ft_error("Error excute while destroying mutex");
+		idx++;
+	}
+	free(*philo);
+}

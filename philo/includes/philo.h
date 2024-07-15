@@ -32,10 +32,16 @@ typedef struct s_args
 
 typedef	struct s_philo
 {
-	int a;
+	pthread_t 		*threads;
+	pthread_mutex_t *mutexs;
+	t_args			*args;
+	int				cur_num;
 }	t_philo;
 
 void		ft_error(char *msg);
-void		ft_parse_arguments(int argc, char **argv, t_args **args);
+void		ft_parse_arguments(int argc, char **argv, t_philo **philo);
+void		ft_initalise(int argc, char **argv, t_philo **philo);
 
+
+void		ft_clear_philo(t_philo **philo);
 # endif

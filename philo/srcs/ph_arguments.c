@@ -22,14 +22,14 @@ static int	ft_strlen(char *str)
 	return (len);
 }
 
-static int		ft_atoi(char *str)
+static int	ft_atoi(char *str)
 {
-	long long	ret;
 	int			idx;
+	long long	ret;
 	long long	base;
 
-	ret = 0;
 	idx = ft_strlen(str) - 1;
+	ret = 0;
 	base = 1;
 	while (idx >= 0)
 	{
@@ -44,17 +44,18 @@ static int		ft_atoi(char *str)
 	return (ret);
 }
 
-void	ft_parse_arguments(int argc, char **argv, t_args **args)
+void	ft_parse_arguments(int argc, char **argv, t_philo **philo)
 {
 	if (argc < 5 || argc > 6)
 		ft_error("Check The Argument Count");
-	*args = (t_args *) malloc(sizeof(t_args));
-	(*args)->n_philos = ft_atoi(argv[1]);
-	(*args)->time_die = ft_atoi(argv[2]);
-	(*args)->time_eat = ft_atoi(argv[3]);
-	(*args)->time_sleep = ft_atoi(argv[4]);
+	(*philo) = (t_philo *) malloc(sizeof(t_philo));
+	(*philo)->args = (t_args *) malloc(sizeof(t_args));
+	(*philo)->args->n_philos = ft_atoi(argv[1]);
+	(*philo)->args->time_die = ft_atoi(argv[2]);
+	(*philo)->args->time_eat = ft_atoi(argv[3]);
+	(*philo)->args->time_sleep = ft_atoi(argv[4]);
 	if (argc == 5)
-		(*args)->time_must_eat = -1;
+		(*philo)->args->time_must_eat = -1;
 	else
-		(*args)->time_must_eat = ft_atoi(argv[5]);
+		(*philo)->args->time_must_eat = ft_atoi(argv[5]);
 }

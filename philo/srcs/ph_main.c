@@ -14,8 +14,13 @@
 
 int	main(int argc, char *argv[])
 {
-	t_args *args;
-	ft_parse_arguments(argc, argv, &args);
-	printf("%d %d %d %d %d", args->n_philos, args->time_die, args->time_eat, args->time_sleep, args->time_must_eat);
+	t_philo *philo;
+
+	ft_initalise(argc, argv, &philo);
+	printf("%d %d %d %d %d", \
+		philo->args->n_philos, philo->args->time_die, philo->args->time_eat, \
+		philo->args->time_sleep, philo->args->time_must_eat);
+
+	ft_clear_philo(&philo);
 	return (0);
 }
