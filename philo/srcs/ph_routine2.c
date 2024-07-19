@@ -1,24 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ph_schedule2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jaehukim <jaehukim42@student.42gyeong      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/13 20:31:48 by jaehukim          #+#    #+#             */
-/*   Updated: 2024/07/13 20:31:50 by jaehukim         ###   ########.fr       */
+/*   Created: 2024/07/19 11:25:10 by jaehukim          #+#    #+#             */
+/*   Updated: 2024/07/19 11:25:13 by jaehukim         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-int	main(int argc, char *argv[])
+void	ft_act_if_mono(t_philo **ph)
 {
-	t_philo *philo;
+	ft_philo_said(ph, ft_get_time(ph), 0, "Is taking fork");
+	ft_philo_said(ph, ft_get_time(ph), 0, "Is dead");
+}
 
-	ft_initalise(argc, argv, &philo);
-	
-	printf("time :%ld\n", ft_get_time(&philo));
-	//ft_clear_philo(&philo);
-	return (0);
+void	ft_act_if_poly(t_philo **ph)
+{
+	ft_philo_said(ph, ft_get_time(ph), (*ph)->current, "Is Thinking");
+	while (1)
+	{
+		ft_taken_fork(ph, (*ph)->current);
+		ft_eat(ph, (*ph)->current);
+		ft_sleep(ph, (*ph)->current);
+	}
+
 }

@@ -12,22 +12,18 @@
 
 #include "../includes/philo.h"
 
-void	*ft_counter(void *arg)
+void	ft_init_monitors(t_philo **philo)
 {
-	int	i;
-	int	thread_id;
+	(*philo)->monitors = malloc(sizeof(t_monitors));
+	(*philo)->monitors->m_die_chk = malloc(sizeof(pthread_mutex_t *));
+	(*philo)->monitors->m_eat = malloc(sizeof(pthread_mutex_t *));
+	(*philo)->monitors->m_print =  malloc(sizeof(pthread_mutex_t *));
+	(*philo)->monitors->m_time = malloc(sizeof(pthread_mutex_t *));
+	pthread_mutex_init((*philo)->monitors->m_die_chk, NULL);
+	pthread_mutex_init((*philo)->monitors->m_eat, NULL);
+	pthread_mutex_init((*philo)->monitors->m_print, NULL);
+	pthread_mutex_init((*philo)->monitors->m_time, NULL);
 
-	i = 0;
-	thread_id = ((t_philo *) arg)->cur_num;
-	pthread_mutex_lock(&(((t_philo *) arg)->mutexs[thread_id]));
-	while (i < 16)
-	{
-		printf("thread %d: %d\n", thread_id, i);
-		i++;
-		usleep(500);
-	}
-	pthread_mutex_unlock(&(((t_philo *) arg)->mutexs[thread_id]));
-	return ((void *) arg);
 }
 
 void	ft_create_mutex(t_philo **philo)
@@ -35,10 +31,43 @@ void	ft_create_mutex(t_philo **philo)
 	int	idx;
 
 	idx = 0;
-	(*philo)->mutexs = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t) * \
-		(*philo)->args->n_philos);
+	(*philo)->mutexs = malloc(sizeof(pthread_mutex_t) * (*philo)->args->n_philos);
 	while (idx < (*philo)->args->n_philos)
-		pthread_mutex_init(&((*philo)->mutexs[idx++]), NULL);
+	{
+		(*philo)->mutexs = malloc(sizeof(pthread_mutex_t));
+		if (!pthread_mutex_init(&((*philo)->mutexs[idx++]), NULL))
+			ft_error("Failed to init mutex");
+	}
+
+}
+
+void	ft_init_time(t_philo **philo)
+{
+	struct timeval	*time;
+	
+	time = (struct timeval *) malloc(sizeof(struct timeval));
+	gettimeofday(time, NULL);
+	(*philo)->base_time = time->tv_usec;
+	free(time);
+}
+
+void	ft_alloc_fork_num(t_philo **philo, int idx)
+{
+	if (idx == 0)
+	{
+		(*philo)->threads->l_frk = 1;
+		(*philo)->threads->r_frk = (*philo)->args->n_philos - 1;
+	}
+	else if (idx == (*philo)->args->n_philos - 1)
+	{
+		(*philo)->threads->l_frk = idx - 1;
+		(*philo)->threads->r_frk = 0;
+	}
+	else
+	{
+		(*philo)->threads->l_frk = idx - 1;
+		(*philo)->threads->r_frk = idx + 1;
+	}
 }
 
 void	ft_create_threads(t_philo **philo)
@@ -46,21 +75,32 @@ void	ft_create_threads(t_philo **philo)
 	int	idx;
 
 	idx = 0;
-	(*philo)->threads = (pthread_t *) malloc(sizeof(pthread_t) * \
+	(*philo)->threads = (t_thd *) malloc(sizeof(t_thd) * \
 			(*philo)->args->n_philos);
 	if (!(*philo)->threads)
 		ft_error("Error while allocating thread");
 	while (idx < (*philo)->args->n_philos)
 	{
-		(*philo)->cur_num = idx;
-		pthread_create(&((*philo)->threads[idx]), NULL, ft_counter, (void *)philo);
+		(*philo)->threads[idx].th = (pthread_t *) malloc(sizeof(pthread_t));
+		pthread_create((*philo)->threads[idx].th,  \
+				NULL, ft_routine, (void *)philo);
+		(*philo)->threads[idx].lst_eat = (*philo)->base_time;
+		(*philo)->threads[idx].cnt_eat = 0;
+		(*philo)->threads[idx].id = idx;
+		ft_alloc_fork_num(philo, idx);
 		idx++;
-	}	
+	}
+	while (idx >= 0)
+		pthread_join(*((*philo)->threads[--idx].th), NULL);
 }
 
 void	ft_initalise(int argc, char **argv, t_philo **philo)
 {
+	
 	ft_parse_arguments(argc, argv, philo);
+	ft_init_monitors(philo);
 	ft_create_mutex(philo);
+	ft_check_die(philo);
+	ft_init_time(philo);
 	ft_create_threads(philo);
 }

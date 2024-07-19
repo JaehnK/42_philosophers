@@ -10,6 +10,8 @@ SRCS =	ph_main.c \
 		ph_utils.c \
 		ph_arguments.c \
 		ph_initalise.c \
+		ph_routine.c \
+		ph_routine2.c
 
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
 OBJS := $(addprefix $(OBJS_DIR)/, $(notdir $(SRCS:.c=.o)))

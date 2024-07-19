@@ -15,24 +15,29 @@
 void	ft_error(char *msg)
 {
 	if (msg)
-		printf("%s", msg);
+		perror(msg);
 	else
 		perror("Error");
 	exit(EXIT_FAILURE);
 }
 
-void	ft_clear_philo(t_philo **philo)
+long	ft_get_time(t_philo **ph)
 {
-	int	idx;
+	struct timeval	*time;
+	long 			ret;
 
-	idx = 0;
-	while (idx < (*philo)->args->n_philos)
-	{
-		if (pthread_join((*philo)->threads[idx], NULL))
-			ft_error("Error excute while joining pthread");
-		if (pthread_mutex_destroy(&((*philo)->mutexs[idx])))
-			ft_error("Error excute while destroying mutex");
-		idx++;
-	}
-	free(*philo);
+	pthread_mutex_lock((*ph)->monitors->m_time);
+	time = (struct timeval *) malloc(sizeof(struct timeval));
+	gettimeofday(time, NULL);
+	ret = time->tv_usec - (*ph)->base_time;
+	free(time);
+	pthread_mutex_unlock((*ph)->monitors->m_time);
+	return (ret);
+}
+
+void	ft_philo_said(t_philo **ph, long time, int id, char *msg)
+{
+	pthread_mutex_lock((*ph)->monitors->m_print);
+	printf("%ld %d %s\n", time, id, msg);
+	pthread_mutex_unlock((*ph)->monitors->m_print);
 }
