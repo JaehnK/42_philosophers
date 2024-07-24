@@ -48,7 +48,7 @@ void	ft_parse_arguments(int argc, char **argv, t_philo **philo)
 {
 	if (argc < 5 || argc > 6)
 		ft_error("Check The Argument Count");
-	(*philo) = (t_philo *) malloc(sizeof(t_philo));
+	(*philo) = (t_philo *) calloc(sizeof(t_philo), 1);
 	(*philo)->args = (t_args *) malloc(sizeof(t_args));
 	(*philo)->args->n_philos = ft_atoi(argv[1]);
 	(*philo)->args->time_die = ft_atoi(argv[2]);

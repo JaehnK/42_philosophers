@@ -1,7 +1,7 @@
 NAME = philo
 HEADR = ./includes/philo.h
 CC = cc
-CFLAGS = -Wall -Werror -Wextra -g
+CFLAGS = -Wall -Werror -Wextra
 
 SRCS_DIR = srcs
 OBJS_DIR = objs
