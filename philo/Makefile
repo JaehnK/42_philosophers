@@ -1,7 +1,7 @@
 NAME = philo
 HEADR = ./includes/philo.h
 CC = cc
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra #-g -fsanitize=thread
 
 SRCS_DIR = srcs
 OBJS_DIR = objs
@@ -11,7 +11,7 @@ SRCS =	ph_main.c \
 		ph_arguments.c \
 		ph_initalise.c \
 		ph_routine.c \
-		ph_routine2.c
+		ph_act.c
 
 SRCS := $(addprefix $(SRCS_DIR)/, $(SRCS))
 OBJS := $(addprefix $(OBJS_DIR)/, $(notdir $(SRCS:.c=.o)))

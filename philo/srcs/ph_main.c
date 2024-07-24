@@ -12,13 +12,10 @@
 
 #include "../includes/philo.h"
 
-int	main(int argc, char *argv[])
+int	main(int argc, char **argv)
 {
-	t_philo *philo;
+	t_philo	*philo;
 
 	ft_initalise(argc, argv, &philo);
-	
-	printf("time :%ld\n", ft_get_time(&philo));
-	//ft_clear_philo(&philo);
 	return (0);
 }
